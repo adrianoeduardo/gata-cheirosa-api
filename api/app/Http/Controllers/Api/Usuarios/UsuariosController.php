@@ -15,7 +15,7 @@ class UsuariosController extends Controller
      */
     public function index()
     {
-        return Usuario::where('ch_excluido', '0')->get();
+        return Usuario::where('ch_excluido', '0')->orderBy('sr_id', 'ASC')->get();
         
     }
 
@@ -35,8 +35,6 @@ class UsuariosController extends Controller
         $usuario->vc_senha =$request->vc_senha;
 
         $usuario->save();
-
-        return $request;
     }
 
     /**
@@ -47,7 +45,8 @@ class UsuariosController extends Controller
      */
     public function show($id)
     {
-        //
+        //return Usuario::find($id);
+        return Usuario::where('sr_id', $id)->where('ch_excluido', '0')->get();
     }
 
     /**
@@ -57,9 +56,12 @@ class UsuariosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Usuario $usuario, Request $request)
     {
-        //
+        $usuario->vc_nome = $request->vc_nome ;
+        $usuario->vc_email = $request->vc_email;
+
+        $usuario->save();
     }
 
     /**
@@ -70,6 +72,12 @@ class UsuariosController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $usuario = Usuario::find($id);
+        $usuario->ch_excluido = '1';
+        $usuario->save();
+
+        
+     
     }
 }

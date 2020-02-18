@@ -23,12 +23,18 @@ class AuthController extends Controller
 
         return response()->json(['error' => 'Unauthorized'], 401);
     }
+    public function logout()
+    {
+        $this->guard('api')->logout();
+
+        return response()->json(['message' => 'Successfully logged out']);
+    }
     protected function respondWithToken($token)
     {
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => $this->guard('api')->factory()->getTTL() * 60*24
+            'expires_in' => $this->guard('api')->factory()->getTTL() * 60
         ]);
     }
     public function guard()
